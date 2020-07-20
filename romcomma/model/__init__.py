@@ -29,6 +29,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import romcomma.model.base
-import romcomma.model.mygpy
-import romcomma.model.myscipy
+import romcomma.model.gpy_
+import romcomma.model.scipy_
 import romcomma.model.run
