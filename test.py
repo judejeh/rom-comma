@@ -28,7 +28,10 @@ from numpy import eye, savetxt, transpose, full
 from pathlib import Path
 from scipy.stats import ortho_group
 
-BASE_PATH = Path('C:\\Users\\fc1ram\\Documents\\Rom\\dat\\SoftwareTest\\0.0')
+import os
+
+# BASE_PATH = Path('C:\\Users\\fc1ram\\Documents\\Rom\\dat\\SoftwareTest\\0.0')
+BASE_PATH = os.path.join(os.path.abspath(__file__)[:-7],'_runs')
 
 
 # noinspection PyShadowingNames
@@ -42,11 +45,11 @@ def run_gps(name, function_name: str, N: int, noise_std: float, random: bool, M:
         lin_trans = eye(M)
         input_transform = None
         store_dir += '.rom'
-    store_dir = BASE_PATH / store_dir
+    store_dir = os.path.join(BASE_PATH, store_dir)
     CDF_loc, CDF_scale, functions = FunctionWithParameters.default(function_name)
     store = functions_of_normal(store_dir=store_dir, N=N, M=M, CDF_loc=CDF_loc, CDF_scale=CDF_scale,
                                 input_transform=input_transform, functions=functions, noise_std=noise_std)
-    savetxt(store.dir / 'InverseRotation.source', transpose(lin_trans))
+    savetxt(os.path.join(store.dir, 'InverseRotation.source'), transpose(lin_trans))
     Fold.into_K_folds(parent=store, K=K, shuffled_before_folding=False, standard=Store.Standard.mean_and_std, replace_empty_test_with_data_=True)
     gp_optimizer_options = {'optimizer': 'bfgs', 'max_iters': 5000, 'gtol': 1E-16}
     kernel_parameters = model.implemented_in_gpflow.Kernel.ExponentialQuadratic.Parameters(lengthscale=full((1, 1), 2.5 ** (M / 5), dtype=float))
